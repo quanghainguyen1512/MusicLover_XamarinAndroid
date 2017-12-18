@@ -113,9 +113,9 @@ namespace Music_Lover.Utils
 
         public string GetArtistSortOrder() => _preferences.GetString(ARTIST_SORT_ORDER, SortOrder.Artist.ARTIST_A_Z);
 
-        public void SetArtistSortOrder(string value)
+        public async Task SetArtistSortOrder(string value)
         {
-            SetSortOrder(ARTIST_SORT_ORDER, value);
+            await SetSortOrder(ARTIST_SORT_ORDER, value);
         }
 
         public string GetArtistSongSortOrder() =>
@@ -123,24 +123,24 @@ namespace Music_Lover.Utils
 
         public string GetAlbumSortOrder() => _preferences.GetString(ALBUM_SORT_ORDER, SortOrder.Album.ALBUM_A_Z);
 
-        public void SetAlbumSortOrder(string value)
+        public async void SetAlbumSortOrder(string value)
         {
-            SetSortOrder(ALBUM_SORT_ORDER, value);
+            await SetSortOrder(ALBUM_SORT_ORDER, value);
         }
 
         public string GetAlbumSongSortOrder() =>
             _preferences.GetString(ALBUM_SONG_SORT_ORDER, SortOrder.AlbumSong.SONG_TRACK_LIST);
 
-        public void SetAlbumSongSortOrder(string value)
+        public async Task SetAlbumSongSortOrder(string value)
         {
-            SetSortOrder(ALBUM_SONG_SORT_ORDER, value);
+            await SetSortOrder(ALBUM_SONG_SORT_ORDER, value);
         }
 
         public string GetSongSortOrder() => _preferences.GetString(SONG_SORT_ORDER, SortOrder.Song.SONG_A_Z);
 
-        public void SetSongSortOrder(string value)
+        public async Task SetSongSortOrder(string value)
         {
-            SetSortOrder(SONG_SORT_ORDER, value);
+            await SetSortOrder(SONG_SORT_ORDER, value);
         }
 
         public bool NowPlayingThemeChanged() => _preferences.GetBoolean(NOW_PLAYNG_THEME_VALUE, false);
