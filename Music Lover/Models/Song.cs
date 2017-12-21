@@ -14,14 +14,13 @@ namespace Music_Lover.Models
 {
     public class Song
     {
-        public int Id { get; set; }
-        public int AlbumId { get; set; }
+        public long Id { get; set; }
+        public long AlbumId { get; set; }
         public string AlbumName { get; set; }
-        public int  ArtistId { get; set; }
+        public long  ArtistId { get; set; }
         public string ArtistName { get; set; }
         public int Duration { get; set; }
-        public int TrackId { get; set; }
         public string Title { get; set; }
-        public int TrackName { get; set; }
+        public int TrackNumber { get; set; }
     }
 }
