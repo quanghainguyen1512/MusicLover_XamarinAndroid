@@ -20,23 +20,25 @@ namespace Music_Lover.Helpers
             return new MyParcelableCreator();
         }
 
-        private int _id, _sourceId, _sourcePos;
-        private Utils.Utils.SourceTypeId _sourceType;
+        public long Id { get; set; }
+        public long SourceId { get; set; }
+        public int SourcePos { get; set; }
+        public Utils.Utils.SourceTypeId SourceType { get; set; }
 
-        public MusicPlaybackTrack(int id, int sourceId, Utils.Utils.SourceTypeId sourceType, int sourcePos)
+        public MusicPlaybackTrack(long id, long sourceId, Utils.Utils.SourceTypeId sourceType, int sourcePos)
         {
-            _id = id;
-            _sourceId = sourceId;
-            _sourceType = sourceType;
-            _sourcePos = sourcePos;
+            Id = id;
+            SourceId = sourceId;
+            SourceType = sourceType;
+            SourcePos = sourcePos;
         }
 
         public MusicPlaybackTrack(Parcel parcel)
         {
-            _id = parcel.ReadInt();
-            _sourceId = parcel.ReadInt();
-            _sourceType = (Utils.Utils.SourceTypeId) parcel.ReadInt();
-            _sourcePos = parcel.ReadInt();
+            Id = parcel.ReadInt();
+            SourceId = parcel.ReadInt();
+            SourceType = (Utils.Utils.SourceTypeId) parcel.ReadInt();
+            SourcePos = parcel.ReadInt();
         }
 
         public int DescribeContents()
@@ -46,20 +48,20 @@ namespace Music_Lover.Helpers
 
         public void WriteToParcel(Parcel dest, ParcelableWriteFlags flags)
         {
-            dest.WriteInt(_id);
-            dest.WriteInt(_sourceId);
-            dest.WriteInt((int)_sourceType);
-            dest.WriteInt(_sourcePos);
+            dest.WriteLong(Id);
+            dest.WriteLong(SourceId);
+            dest.WriteInt((int)SourceType);
+            dest.WriteInt(SourcePos);
         }
 
         public override bool Equals(Object obj)
         {
             if (obj is MusicPlaybackTrack mpt)
             {
-                return _id == mpt._id && 
-                    _sourceId == mpt._sourceId && 
-                    _sourceType == mpt._sourceType && 
-                    _sourcePos == mpt._sourcePos;
+                return Id == mpt.Id && 
+                    SourceId == mpt.SourceId && 
+                    SourceType == mpt.SourceType && 
+                    SourcePos == mpt.SourcePos;
             }
             return base.Equals(obj);
         }
