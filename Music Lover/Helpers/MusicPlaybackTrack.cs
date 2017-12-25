@@ -9,12 +9,14 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Java.Interop;
 using Object = Java.Lang.Object;
 
 namespace Music_Lover.Helpers
 {
     public class MusicPlaybackTrack : Java.Lang.Object, IParcelable
     {
+        [ExportField("CREATOR")]
         public static MyParcelableCreator InitCreator()
         {
             return new MyParcelableCreator();
@@ -35,8 +37,8 @@ namespace Music_Lover.Helpers
 
         public MusicPlaybackTrack(Parcel parcel)
         {
-            Id = parcel.ReadInt();
-            SourceId = parcel.ReadInt();
+            Id = parcel.ReadLong();
+            SourceId = parcel.ReadLong();
             SourceType = (Utils.Utils.SourceTypeId) parcel.ReadInt();
             SourcePos = parcel.ReadInt();
         }
@@ -65,17 +67,17 @@ namespace Music_Lover.Helpers
             }
             return base.Equals(obj);
         }
-    }
-    public class MyParcelableCreator : Object, IParcelableCreator
-    {
-        public Object CreateFromParcel(Parcel source)
+        public class MyParcelableCreator : Object, IParcelableCreator
         {
-            return new MusicPlaybackTrack(source);
-        }
+            public Object CreateFromParcel(Parcel source)
+            {
+                return new MusicPlaybackTrack(source);
+            }
 
-        public Object[] NewArray(int size)
-        {
-            return new Object[size];
+            public Object[] NewArray(int size)
+            {
+                return new Object[size];
+            }
         }
     }
 }
