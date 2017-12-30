@@ -43,45 +43,50 @@ namespace Music_Lover
 
         #region Const fields
 
-        private const string PLAYSTATE_CHANGED = "Music_Lover.playstatechanged";
+        public const string PLAYSTATE_CHANGED = "Music_Lover.playstatechanged";
         private const string POSITION_CHANGED = "Music_Lover.positionchanged";
-        private const string META_CHANGED = "Music_Lover.metachanged";
+        public const string META_CHANGED = "Music_Lover.metachanged";
         private const string QUEUE_CHANGED = "Music_Lover.queuechanged";
-        private const string PLAYLIST_CHANGED = "Music_Lover.playlistchanged";
+        public const string PLAYLIST_CHANGED = "Music_Lover.playlistchanged";
         private const string REPEATMODE_CHANGED = "Music_Lover.repeatmodechanged";
         private const string SHUFFLEMODE_CHANGED = "Music_Lover.shufflemodechanged";
-        private const string TRACK_ERROR = "Music_Lover.trackerror";
+
+        public const string TRACK_ERROR = "Music_Lover.trackerror";
+
         private const string APP_PACKAGE_NAME = "Music_Lover";
-        private const string MUSIC_PACKAGE_NAME = "com.android.music";
-        private const string SERVICECMD = "Music_Lover.musicservicecommand";
+        private const string MUSIC_PACKAGE_NAME = "com.xamarin.music";
+
+        public const string SERVICECMD = "Music_Lover.musicservicecommand";
         private const string TOGGLEPAUSE_ACTION = "Music_Lover.togglepause";
         private const string PAUSE_ACTION = "Music_Lover.pause";
         private const string STOP_ACTION = "Music_Lover.stop";
-        private const string PREVIOUS_ACTION = "Music_Lover.previous";
-        private const string PREVIOUS_FORCE_ACTION = "Music_Lover.previous.force";
+        public const string PREVIOUS_ACTION = "Music_Lover.previous";
+        public const string PREVIOUS_FORCE_ACTION = "Music_Lover.previous.force";
         private const string NEXT_ACTION = "fMusic_Lover.next";
         private const string REPEAT_ACTION = "Music_Lover.repeat";
         private const string SHUFFLE_ACTION = "Music_Lover.shuffle";
-        private const string FROM_MEDIA_BUTTON = "frommediabutton";
-        private const string REFRESH = "Music_Lover.refresh";
-        private const string UPDATE_LOCKSCREEN = "Music_Lover.updatelockscreen";
-        private const string CMDNAME = "command";
-        private const string CMDTOGGLEPAUSE = "togglepause";
-        private const string CMDSTOP = "stop";
-        private const string CMDPAUSE = "pause";
-        private const string CMDPLAY = "play";
-        private const string CMDPREVIOUS = "previous";
-        private const string CMDNEXT = "next";
+        public const string REFRESH = "Music_Lover.refresh";
+        public const string FROM_MEDIA_BUTTON = "frommediabutton";
+
+        public const string CMDNAME = "command";
+        public const string CMDTOGGLEPAUSE = "togglepause";
+        public const string CMDSTOP = "stop";
+        public const string CMDPAUSE = "pause";
+        public const string CMDPLAY = "play";
+        public const string CMDPREVIOUS = "previous";
+        public const string CMDNEXT = "next";
+
         private const string UPDATE_PREFERENCES = "updatepreferences";
 
-        private const int NEXT = 2;
-        private const int LAST = 3;
-        private const int SHUFFLE_NONE = 0;
-        private const int SHUFFLE_NORMAL = 1;
-        private const int SHUFFLE_AUTO = 2;
-        private const int REPEAT_NONE = 0;
-        private const int REPEAT_CURRENT = 1;
-        private const int REPEAT_ALL = 2;
+        public const int NEXT = 2;
+        public const int LAST = 3;
+        public const int SHUFFLE_NONE = 0;
+        public const int SHUFFLE_NORMAL = 1;
+        public const int SHUFFLE_AUTO = 2;
+        public const int REPEAT_NONE = 0;
+        public const int REPEAT_CURRENT = 1;
+        public const int REPEAT_ALL = 2;
+
         private const int MAX_HISTORY_SIZE = 1000;
         private const string SHUTDOWN = "Music_Lover.shutdown";
         private const int IDCOLIDX = 0;
@@ -156,7 +161,7 @@ namespace Music_Lover
         private PowerManager.WakeLock _wakeLock;
         private AlarmManager _alarmManager;
         private PendingIntent _shutdownIntent;
-        private MultiPlayer _player;
+        private InternalPlayer _player;
         private NotificationManagerCompat _notificationManager;
         private ICursor _cursor;
         private ICursor _albumCursor;
@@ -240,7 +245,7 @@ namespace Music_Lover
 
             RegisterExternalStorageLisenter();
 
-            _player = new MultiPlayer(this) {Handler = _playerHandler};
+            _player = new InternalPlayer(this) {Handler = _playerHandler};
 
             _intenReceiver = new IntentReceiver()
             {
@@ -1111,6 +1116,7 @@ namespace Music_Lover
 
         #endregion
 
+        #region Other methods
         private Notification BuildNotification()
         {
             var albumName = GetAlbumName();
@@ -1122,7 +1128,7 @@ namespace Music_Lover
             var nowPlayingIntent = NavigationUtils.GetNowPlayingIntent(this);
             var clickIntent = PendingIntent.GetActivity(this, 0, nowPlayingIntent, PendingIntentFlags.UpdateCurrent);
 
-            var artPic = ImageLoader.Instance.LoadImageSync(Utils.Utils.GetAlbumArtUri(GetAlbumId()).ToString()) ??
+            var artPic = ImageLoader.Instance.LoadImageSync(Utils.MusicUtils.GetAlbumArtUri(GetAlbumId()).ToString()) ??
                          ImageLoader.Instance.LoadImageSync($"drawable://{Resource.Drawable.ic_empty_music2}");
 
             if (_notificationPostTime == 0)
@@ -1487,10 +1493,22 @@ namespace Music_Lover
                         break;
                     }
                 }
+
+                if (shutdown)
+                {
+                    ScheduleDelayedShutdown();
+                    if (IsPlaying)
+                    {
+                        IsPlaying = false;
+                        NotifyChange(PLAYSTATE_CHANGED);
+                    }
+                    else if (openNext)
+                        SetNextTrack();
+                }
             }
         }
 
-        private void AddToPlayList(long[] list, int pos, long srcId, Utils.Utils.SourceTypeId srcType)
+        private void AddToPlayList(long[] list, int pos, long srcId, Utils.MusicUtils.SourceTypeId srcType)
         {
             var len = list.Length;
             if (pos < 0)
@@ -1710,7 +1728,7 @@ namespace Music_Lover
                         if (_cursor != null && shouldAddToPlaylist)
                         {
                             _playlist.Clear();
-                            _playlist.Add(new MusicPlaybackTrack(_cursor.GetLong(IDCOLIDX), -1, Utils.Utils.SourceTypeId.NA, -1));
+                            _playlist.Add(new MusicPlaybackTrack(_cursor.GetLong(IDCOLIDX), -1, Utils.MusicUtils.SourceTypeId.NA, -1));
                             NotifyChange(QUEUE_CHANGED);
                             _playPos = 0;
                             _history.Clear();
@@ -1765,7 +1783,7 @@ namespace Music_Lover
                 {
                     _history.RemoveAt(0);
                 }
-                _playlist.Add(new MusicPlaybackTrack(_autoShuffleList[index], -1, Utils.Utils.SourceTypeId.NA, -1));
+                _playlist.Add(new MusicPlaybackTrack(_autoShuffleList[index], -1, Utils.MusicUtils.SourceTypeId.NA, -1));
                 notify = true;
             }
 
@@ -1881,7 +1899,7 @@ namespace Music_Lover
             }
         }
 
-        public void Open(long[] list, int position, long srcId, Utils.Utils.SourceTypeId srcType)
+        public void Open(long[] list, int position, long srcId, Utils.MusicUtils.SourceTypeId srcType)
         {
             if (ShuffleMode == SHUFFLE_AUTO)
                 ShuffleMode = SHUFFLE_AUTO;
@@ -1913,7 +1931,7 @@ namespace Music_Lover
             }
         }
 
-        public void Enqueue(long[] list, int action, long sourceId, Utils.Utils.SourceTypeId sourceType)
+        public void Enqueue(long[] list, int action, long sourceId, Utils.MusicUtils.SourceTypeId sourceType)
         {
             lock (_padlock)
             {
@@ -1997,6 +2015,7 @@ namespace Music_Lover
                     Seek(newPos);
             }
         }
+#endregion
 
         #region Nested classes
 
@@ -2066,7 +2085,7 @@ namespace Music_Lover
             }
         }
 
-        private class MultiPlayer : Java.Lang.Object,MediaPlayer.IOnErrorListener, MediaPlayer.IOnCompletionListener
+        public class InternalPlayer : Java.Lang.Object,MediaPlayer.IOnErrorListener, MediaPlayer.IOnCompletionListener
         {
             private readonly MusicService _service;
 
@@ -2079,7 +2098,7 @@ namespace Music_Lover
             public int Position => _curPlayer.CurrentPosition;
             public int AudioSessionId => _curPlayer.AudioSessionId;
 
-            public MultiPlayer(MusicService service)
+            public InternalPlayer(MusicService service)
             {
                 _service = service;
                 _curPlayer.SetWakeMode(_service, WakeLockFlags.Partial);
@@ -2244,7 +2263,7 @@ namespace Music_Lover
             public override void OpenFile(string path) => _service.OpenFile(path);
 
             public override void Open(long[] list, int position, long sourceId, int sourceType)
-                => _service.Open(list, position, sourceId, (Utils.Utils.SourceTypeId)sourceType);
+                => _service.Open(list, position, sourceId, (Utils.MusicUtils.SourceTypeId)sourceType);
             
 
             public override void Stop() => _service.Stop(true);
@@ -2258,7 +2277,7 @@ namespace Music_Lover
             public override void Next() => _service.GoToNext(true);
 
             public override void Enqueue(long[] list, int action, long sourceId, int sourceType) 
-                => _service.Enqueue(list, action, sourceId, (Utils.Utils.SourceTypeId)sourceType);
+                => _service.Enqueue(list, action, sourceId, (Utils.MusicUtils.SourceTypeId)sourceType);
 
             public override void SetQueuePosition(int index) => _service.SetQueuePosition(index);
 
