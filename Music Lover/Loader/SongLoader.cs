@@ -137,7 +137,7 @@ namespace Music_Lover.Loader
             return song;
         }
 
-        private static ICursor CreateSongCursor(Context context, string selection, string[] param, string sortOrder)
+        public static ICursor CreateSongCursor(Context context, string selection, string[] param, string sortOrder)
         {
             var statement = "is_music = 1 AND title != ''";
             var uri = Media.ExternalContentUri;
@@ -149,7 +149,7 @@ namespace Music_Lover.Loader
             return context.ContentResolver.Query(uri, PROJECTION, statement, param, sortOrder);
         }
 
-        private static ICursor CreateSongCursor(Context context, string selection, string[] param)
+        public static ICursor CreateSongCursor(Context context, string selection, string[] param)
         {
             var songSortOrder = PreferencesUtility.GetInstance(context).GetSongSortOrder();
             return CreateSongCursor(context, selection, param, songSortOrder);
