@@ -44,15 +44,15 @@ namespace Music_Lover
         #region Const fields
 
         public const string PLAYSTATE_CHANGED = "Music_Lover.playstatechanged";
-        private const string POSITION_CHANGED = "Music_Lover.positionchanged";
         public const string META_CHANGED = "Music_Lover.metachanged";
-        private const string QUEUE_CHANGED = "Music_Lover.queuechanged";
         public const string PLAYLIST_CHANGED = "Music_Lover.playlistchanged";
+        public const string TRACK_ERROR = "Music_Lover.trackerror";
+        public const string REFRESH = "Music_Lover.refresh";
+
+        private const string POSITION_CHANGED = "Music_Lover.positionchanged";
+        private const string QUEUE_CHANGED = "Music_Lover.queuechanged";
         private const string REPEATMODE_CHANGED = "Music_Lover.repeatmodechanged";
         private const string SHUFFLEMODE_CHANGED = "Music_Lover.shufflemodechanged";
-
-        public const string TRACK_ERROR = "Music_Lover.trackerror";
-
         private const string APP_PACKAGE_NAME = "Music_Lover";
         private const string MUSIC_PACKAGE_NAME = "com.xamarin.music";
 
@@ -65,7 +65,6 @@ namespace Music_Lover
         private const string NEXT_ACTION = "fMusic_Lover.next";
         private const string REPEAT_ACTION = "Music_Lover.repeat";
         private const string SHUFFLE_ACTION = "Music_Lover.shuffle";
-        public const string REFRESH = "Music_Lover.refresh";
         public const string FROM_MEDIA_BUTTON = "frommediabutton";
 
         public const string CMDNAME = "command";
@@ -1517,7 +1516,7 @@ namespace Music_Lover
                 pos = 0;
             }
 
-            _playlist.Capacity = _playlist.Count + len;
+            //_playlist.Capacity = _playlist.Count + len;
             if (pos > _playlist.Count)
                 pos = _playlist.Count;
 

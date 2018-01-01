@@ -20,7 +20,7 @@ namespace Music_Lover
 {
     public class MusicPlayer
     {
-        public static IMusicService Service { get; private set; }
+        public static IMusicService Service { get; set; }
         private static Dictionary<Context, ServiceConnection> _connectionMap = new Dictionary<Context, ServiceConnection>();
         private static long[] _emptyList = new long[0];
         private static ContentValues[] _valuesCache;

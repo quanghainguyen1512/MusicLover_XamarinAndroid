@@ -18,7 +18,7 @@ namespace Music_Lover.Helpers
         private const int LONG_PRESS_DELAY = 1000;
         private const int DOUBLE_CLICK = 800;
 
-        private static PowerManager.WakeLock _wakeLock = null;
+        private static PowerManager.WakeLock _wakeLock;
 
         private static int _clickCounter;
         private static long _lastClickTime;
@@ -37,8 +37,7 @@ namespace Music_Lover.Helpers
             }
             else if (intentAction.Equals(Intent.ActionMediaButton))
             {
-                var key = intent.GetParcelableExtra(Intent.ExtraKeyEvent) as KeyEvent;
-                if (key == null)
+                if (!(intent.GetParcelableExtra(Intent.ExtraKeyEvent) is KeyEvent key))
                     return;
                 var keycode = key.KeyCode;
                 var action = key.Action;
@@ -134,8 +133,8 @@ namespace Music_Lover.Helpers
         {
             if (_wakeLock == null)
             {
-                Context appContext = context.ApplicationContext;
-                PowerManager pm = (PowerManager)appContext.GetSystemService(Context.PowerService);
+                var appContext = context.ApplicationContext;
+                var pm = (PowerManager)appContext.GetSystemService(Context.PowerService);
                 _wakeLock = pm.NewWakeLock(WakeLockFlags.Partial, "Headset button");
                 _wakeLock.SetReferenceCounted(false);
             }

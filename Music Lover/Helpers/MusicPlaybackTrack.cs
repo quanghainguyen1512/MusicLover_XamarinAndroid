@@ -25,9 +25,9 @@ namespace Music_Lover.Helpers
         public long Id { get; set; }
         public long SourceId { get; set; }
         public int SourcePos { get; set; }
-        public Utils.Utils.SourceTypeId SourceType { get; set; }
+        public Utils.MusicUtils.SourceTypeId SourceType { get; set; }
 
-        public MusicPlaybackTrack(long id, long sourceId, Utils.Utils.SourceTypeId sourceType, int sourcePos)
+        public MusicPlaybackTrack(long id, long sourceId, Utils.MusicUtils.SourceTypeId sourceType, int sourcePos)
         {
             Id = id;
             SourceId = sourceId;
@@ -39,7 +39,7 @@ namespace Music_Lover.Helpers
         {
             Id = parcel.ReadLong();
             SourceId = parcel.ReadLong();
-            SourceType = (Utils.Utils.SourceTypeId) parcel.ReadInt();
+            SourceType = (Utils.MusicUtils.SourceTypeId) parcel.ReadInt();
             SourcePos = parcel.ReadInt();
         }
 
