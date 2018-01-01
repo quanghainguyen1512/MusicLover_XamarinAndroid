@@ -135,7 +135,7 @@ namespace Music_Lover.Providers
                     do
                     {
                         result.Add(new MusicPlaybackTrack(cursor.GetLong(0), cursor.GetLong(1),
-                            (Utils.Utils.SourceTypeId) cursor.GetInt(2), cursor.GetInt(3)));
+                            (Utils.MusicUtils.SourceTypeId) cursor.GetInt(2), cursor.GetInt(3)));
                     } while (cursor.MoveToNext());
                 }
 

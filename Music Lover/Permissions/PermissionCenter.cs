@@ -54,7 +54,7 @@ namespace Music_Lover.Permissions
             activity.RequestPermissions(permissions, request.RequestCode);
         }
 
-        public static void OnRequestPermissionsResult(int reqCode, int[] grantResults)
+        public static void OnRequestPermissionsResult(int reqCode, Permission[] grantResults)
         {
             var req = new PermissionRequest(reqCode);
             if (_permissionRequests.Contains(req))
@@ -96,9 +96,9 @@ namespace Music_Lover.Permissions
             }
         }
 
-        private static bool VerifyPermissions(int[] grantResults)
+        private static bool VerifyPermissions(IEnumerable<Permission> grantResults)
         {
-            return grantResults.All(r => r == (int) Permission.Granted);
+            return grantResults.All(r => r == Permission.Granted);
         }
     }
 }

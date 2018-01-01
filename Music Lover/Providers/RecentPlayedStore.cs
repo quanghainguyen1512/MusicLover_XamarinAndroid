@@ -18,7 +18,7 @@ namespace Music_Lover.Providers
     {
         private static readonly object Padlock = new object();
         private int MAX_RECENT_ITEM = 20;
-        private MusicDatabase _musicDatabase = null;
+        private readonly MusicDatabase _musicDatabase = null;
         private static RecentPlayedStore _instance = null;
 
         public RecentPlayedStore(Context context) 
@@ -50,7 +50,7 @@ namespace Music_Lover.Providers
             Create(db);
         }
 
-        public void AddSongId(int songId)
+        public void AddSongId(long songId)
         {
             var db = _musicDatabase.WritableDatabase;
             db.BeginTransaction();
@@ -61,7 +61,7 @@ namespace Music_Lover.Providers
                 try
                 {
                     mostRecent = GetRecentIds("1");
-                    if (mostRecent != null && mostRecent.MoveToFirst() && songId == mostRecent.GetInt(0))
+                    if (mostRecent != null && mostRecent.MoveToFirst() && songId == mostRecent.GetLong(0))
                     {
                         return;
                     }
@@ -73,7 +73,7 @@ namespace Music_Lover.Providers
 
                 var val = new ContentValues(2);
                 val.Put(RecentStoreColumns.ID, songId);
-                val.Put(RecentStoreColumns.TIMEPLAYED, SystemClock.CurrentThreadTimeMillis());
+                val.Put(RecentStoreColumns.TIMEPLAYED, Java.Lang.JavaSystem.CurrentTimeMillis());
                 db.Insert(RecentStoreColumns.NAME, null, val);
 
                 ICursor oldest = null;
