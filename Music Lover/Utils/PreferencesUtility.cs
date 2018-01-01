@@ -1,36 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Android.App;
+﻿using System.Threading.Tasks;
 using Android.Content;
-using Android.OS;
 using Android.Preferences;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 
 namespace Music_Lover.Utils
 {
     public class PreferencesUtility
     {
-        public const string ARTIST_SORT_ORDER = "artist_sort_order";
-        public const string ARTIST_SONG_SORT_ORDER = "artist_song_sort_order";
-        public const string ARTIST_ALBUM_SORT_ORDER = "artist_album_sort_order";
-        public const string ALBUM_SORT_ORDER = "album_sort_order";
-        public const string ALBUM_SONG_SORT_ORDER = "album_song_sort_order";
-        public const string SONG_SORT_ORDER = "song_sort_order";
-        private const string NOW_PLAYING_SELECTOR = "now_paying_selector";
+        private const string ARTIST_SORT_ORDER = "artist_sort_order";
+        private const string ARTIST_SONG_SORT_ORDER = "artist_song_sort_order";
+        private const string ARTIST_ALBUM_SORT_ORDER = "artist_album_sort_order";
+        private const string ALBUM_SORT_ORDER = "album_sort_order";
+        private const string ALBUM_SONG_SORT_ORDER = "album_song_sort_order";
+        private const string SONG_SORT_ORDER = "song_sort_order";
         private const string TOGGLE_ANIMATIONS = "toggle_animations";
         private const string TOGGLE_SYSTEM_ANIMATIONS = "toggle_system_animations";
         private const string TOGGLE_ARTIST_GRID = "toggle_artist_grid";
         private const string TOGGLE_ALBUM_GRID = "toggle_album_grid";
         private const string TOGGLE_HEADPHONE_PAUSE = "toggle_headphone_pause";
-        private const string THEME_PREFERNCE = "theme_preference";
         private const string START_PAGE_INDEX = "start_page_index";
         private const string START_PAGE_PREFERENCE_LASTOPENED = "start_page_preference_latopened";
         private const string NOW_PLAYNG_THEME_VALUE = "now_playing_theme_value";
+        private const string NOW_PLAYING_SELECTOR = "now_paying_selector";
+        private const string THEME_PREFERNCE = "theme_preference";
+        private const string LAST_ADDED_CUTOFF = "last_added_cutoff";
+        private const string GESTURE = "gesture";
+
 
         private static PreferencesUtility _instance;
         private static ISharedPreferences _preferences;
@@ -61,6 +55,11 @@ namespace Music_Lover.Utils
                 editor.PutBoolean(TOGGLE_ARTIST_GRID, b);
                 editor.Apply();
             });
+        }
+
+        public bool IsGestureEnabled()
+        {
+            return _preferences.GetBoolean(GESTURE, true);
         }
 
         public bool IsAlbumInGrid() => _preferences.GetBoolean(TOGGLE_ALBUM_GRID, true);
@@ -123,7 +122,7 @@ namespace Music_Lover.Utils
 
         public string GetAlbumSortOrder() => _preferences.GetString(ALBUM_SORT_ORDER, SortOrder.Album.ALBUM_A_Z);
 
-        public async void SetAlbumSortOrder(string value)
+        public async Task SetAlbumSortOrder(string value)
         {
             await SetSortOrder(ALBUM_SORT_ORDER, value);
         }
@@ -153,6 +152,16 @@ namespace Music_Lover.Utils
                 editor.PutBoolean(NOW_PLAYNG_THEME_VALUE, value);
                 editor.Apply();
             });
+        }
+
+        public void SetLastAddedCutoff(long mil)
+        {
+            _preferences.Edit().PutLong(LAST_ADDED_CUTOFF, mil).Apply();
+        }
+
+        public long GetLastAddedCutoff()
+        {
+            return _preferences.GetLong(LAST_ADDED_CUTOFF, 0L);
         }
     }
 }
