@@ -53,18 +53,18 @@
 
 
         </LinearLayout>
-<!---->
-<!--        <net.steamcrafted.materialiconlib.MaterialIconView-->
-<!--            android:id="@+id/currentlyPlayingIndicator"-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_marginRight="20dp"-->
-<!--            android:background="?attr/selectableItemBackgroundBorderless"-->
-<!--            android:scaleType="center"-->
-<!--            android:visibility="invisible"-->
-<!--            app:materialIconColor="#fff"-->
-<!--            app:materialIconSize="35dp" />-->
+        <!---->
+        <!--        <net.steamcrafted.materialiconlib.MaterialIconView-->
+        <!--            android:id="@+id/currentlyPlayingIndicator"-->
+        <!--            android:layout_width="48dp"-->
+        <!--            android:layout_height="48dp"-->
+        <!--            android:layout_alignParentRight="true"-->
+        <!--            android:layout_marginRight="20dp"-->
+        <!--            android:background="?attr/selectableItemBackgroundBorderless"-->
+        <!--            android:scaleType="center"-->
+        <!--            android:visibility="invisible"-->
+        <!--            app:materialIconColor="#fff"-->
+        <!--            app:materialIconSize="35dp" />-->
 
 
     </RelativeLayout>
